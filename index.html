@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>prismctl — prism 对话客户端</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header>
+  <b>prismctl</b>
+  <span>cookie + sandbox bootstrap → 真实对话（start → status 轮询）</span>
+  <span id="health"></span>
+</header>
+
+<main>
+  <aside id="left">
+    <section>
+      <h3>历史回合 <button class="mini" onclick="exportHistory()">导出 JSON</button></h3>
+      <div id="turns" class="list"><div class="empty">还没有回合</div></div>
+    </section>
+
+    <section>
+      <h3>工具调用 <span id="toolCount" class="badge">0</span></h3>
+      <div id="tools" class="list"><div class="empty">沙箱执行期间这里会实时出现</div></div>
+    </section>
+
+    <section>
+      <h3>事件流 <span id="eventCount" class="badge">0</span></h3>
+      <div id="events" class="list"><div class="empty">task_started / user_message / function_call …</div></div>
+    </section>
+
+    <details id="cfg">
+      <summary>配置（cookie / sandbox_token / context）</summary>
+      <label>Cookie（必须含 oai-sc / prism_session_token / prism_oai_access_token）</label>
+      <textarea id="cookie" rows="4" placeholder="从 DevTools 整行复制"></textarea>
+
+      <label>sandbox_token（缺了只能得到 sandbox_reconnecting）</label>
+      <textarea id="sandboxToken" rows="3" placeholder="gAAAAA..."></textarea>
+
+      <label>codex_listen_snapshot（JSON）</label>
+      <textarea id="listenSnapshot" rows="3"></textarea>
+
+      <label>conversationId</label>
+      <input id="conversationId" placeholder="cdx1_...">
+      <label>projectId</label>
+      <input id="projectId">
+      <label>userId</label>
+      <input id="userId">
+      <label>model</label>
+      <input id="model" value="gpt-6-astra">
+      <label>reasoning_effort</label>
+      <input id="reasoningEffort" value="xhigh">
+      <label>sandbox_url</label>
+      <input id="sandboxUrl" value="https://prism.openai.com/s/sandboxes/proxy/">
+      <label>Context（system 上下文 JSON，留空用空工程占位）</label>
+      <textarea id="context" rows="3"></textarea>
+    </details>
+  </aside>
+
+  <div id="right">
+    <div id="compose">
+      <label>提问</label>
+      <textarea id="prompt" placeholder="例如：列出项目里的文件，并给出 main.tex 的前三行  （Ctrl+Enter 发送）"></textarea>
+      <div id="bar">
+        <button onclick="send()">发送并轮询</button>
+        <button onclick="heartbeat()">沙箱探活</button>
+        <button onclick="stopPoll()">停止轮询</button>
+        <span id="status" class="dim"></span>
+      </div>
+    </div>
+    <div id="answer" class="dim">等待提问…</div>
+    <div id="debug">
+      <div class="dbg-head"><span id="dbgTitle">原始 JSON</span><span class="dim">点击左侧条目可查看它的原始数据</span></div>
+      <pre id="log"></pre>
+    </div>
+  </div>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>
