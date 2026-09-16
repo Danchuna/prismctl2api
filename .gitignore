@@ -1,0 +1,16 @@
+# 凭据：绝对不要提交
+cookie.txt
+bootstrap*
+*.har
+t_token.txt
+t_*.json
+*.token
+gw.err.log
+gw.out.log
+
+# 构建产物 / 本地临时
+*.exe
+events_report.txt
+tmpcheck/
+_ship/
+out_*.txt
